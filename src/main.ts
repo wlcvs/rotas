@@ -1,7 +1,23 @@
 import { api } from "./api.js";
 
+const periods = { 
+  morning: [
+    ["09:00:00", "11:00:00"],
+    ["10:00:00", "13:00:00"],
+    ["11:00:00", "13:00:00"]
+  ],
+  afternoon: [
+    ["13:00:00", "17:00:00"],
+    ["14:00:00", "16:00:00"]
+  ], 
+  night: [
+    ["17:00:00", "20:00:00"],
+    ["18:00:00", "20:00:00"]
+  ]
+};
 
-async function getPedidos() {
+async function getOrders() {
+
   const response: any = await api.get("/importacao/pedidos/", {
     params: {
       client_id: 1,
@@ -13,4 +29,4 @@ async function getPedidos() {
   console.log(response.data);
 }
 
-getPedidos();
+getOrders();
