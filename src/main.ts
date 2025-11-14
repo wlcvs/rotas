@@ -1,23 +1,21 @@
 import { api } from "./api.js";
+import { getFormattedDate } from "./utils/formatDate.js"
 
-const periods = { 
-  morning: [
-    ["09:00:00", "11:00:00"],
-    ["10:00:00", "13:00:00"],
-    ["11:00:00", "13:00:00"]
-  ],
-  afternoon: [
-    ["13:00:00", "17:00:00"],
-    ["14:00:00", "16:00:00"]
-  ], 
-  night: [
-    ["17:00:00", "20:00:00"],
-    ["18:00:00", "20:00:00"]
-  ]
+const time_intervals = { 
+  morning: ["09:00:00", "13:00:00"],
+  afternoon: ["13:00:00", "17:00:00"], 
+  night: ["17:00:00", "20:00:00"],
 };
 
-async function getOrders() {
+function catchThePeriod(day: "today" |
+"tomorrow" = "today", time_interval: string[]) {
+  return {
+    period_initial: `${getFormattedDate(day)}T${time_interval[0]}`, 
+    period_final: `${getFormattedDate(day)}T${time_interval[1]}`
+  }
+}
 
+async function getOrders() {
   const response: any = await api.get("/importacao/pedidos/", {
     params: {
       client_id: 1,
@@ -29,4 +27,6 @@ async function getOrders() {
   console.log(response.data);
 }
 
-getOrders();
+// getOrders();
+console.log(catchThePeriod("today", time_intervals.morning).period_initial);
+console.log(catchThePeriod("today", time_intervals.morning).period_final);
