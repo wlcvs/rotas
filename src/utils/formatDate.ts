@@ -1,5 +1,4 @@
-export function getFormattedDate(type: "today" |
-"tomorrow" = "today"): string {
+export function getFormattedDate(type: "today" | "tomorrow") {
   const date = new Date()
 
   if (type === "tomorrow") {
