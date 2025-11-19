@@ -24,6 +24,16 @@ const statusID = {
     FATURAMENTO: 4,
     AGUARDANDO_ATENDIMENTO: 9,
     EM_ATENDIMENTO: 10,
+    PENDENTE: 11,
+    AGUARDANDO_SEPARACAO: 12,
+    EM_SEPARACAO: 13,
+    PENDENTE_SEPARACAO: 14,
+    AGUARDANDO_EMPACOTAMENTO: 18,
+    EM_EMPACOTAMENTO: 19,
+    PENDENTE_EMPACOTAMENTO: 20,
+    AGUARDANDO_FATURAMENTO: 21,
+    EM_FATURAMENTO: 22,
+    AGUARDANDO_LOGISTICA: 23,
 } as const;
 
 function catchThePeriod(
@@ -45,7 +55,7 @@ async function getOrders() {
     params: {
       client_id: 1,
       centro_distribuicao_id: 2,
-      compra_status_id: 22,
+      compra_status_id: statusID.AGUARDANDO_LOGISTICA,
       data_entrega_inicial: period.initial, 
       data_entrega_final: period.final, 
     }
