@@ -1,42 +1,53 @@
 import { api } from "./api.js";
-import { getFormattedDate } from "./utils/formatDate.js"
+import { getFormattedDate } from "./utils/format-date.js"
 
-const time_intervals = { 
+const timeIntervals = { 
   morning: {
-    scheduled_delivery_1: ["09:00:00", "11:00:00"],
-    normal_delivery: ["10:00:00", "13:00:00"],
-    scheduled_delivery_2: ["11:00:00", "13:00:00"]
+    scheduledDelivery1: ["09:00:00", "11:00:00"],
+    normalDelivery: ["10:00:00", "13:00:00"],
+    scheduledDelivery2: ["11:00:00", "13:00:00"]
   },
   afternoon: {
-    normal_delivery: ["13:00:00", "17:00:00"],  
-    scheduled_delivery: ["14:00:00", "16:00:00"],
+    normalDelivery: ["13:00:00", "17:00:00"],  
+    scheduledDelivery: ["14:00:00", "16:00:00"],
   },
   night: {
-    normal_delivery: ["17:00:00", "20:00:00"],  
-    scheduled_delivery: ["18:00:00", "20:00:00"],
+    normalDelivery: ["17:00:00", "22:00:00"],  
+    scheduledDelivery: ["18:00:00", "20:00:00"],
   }
 };
 
-function catchThePeriod(day: "today" |
-"tomorrow", time_interval: string[]) {
+const statusID = {
+
+} as const;
+
+function catchThePeriod(
+  day: "today" | "tomorrow",
+  [start, end]: [string, string]
+) {
+
+  const date = getFormattedDate(day);
+
   return {
-    period_initial: `${getFormattedDate(day)}T${time_interval[0]}`, 
-    period_final: `${getFormattedDate(day)}T${time_interval[1]}`
-  }
+    initial: `${date}T${start}`, 
+    final: `${date}T${end}`
+  };
 }
 
 async function getOrders() {
-  const response: any = await api.get("/importacao/pedidos/", {
+  const [start, end] = timeIntervals.morning.normalDelivery; 
+  const period = catchThePeriod("today", [start, end]);
+  const response = await api.get("/importacao/pedidos/", {
     params: {
       client_id: 1,
       centro_distribuicao_id: 2,
-      data_entrega_inicial:"2025-11-14T09:00:00",
-      data_entrega_final: "2025-11-14T13:00:00",
+      compra_status_id: 22,
+      data_entrega_inicial: period.initial, 
+      data_entrega_final: period.final, 
     }
   });
+
   console.log(response.data);
 }
 
-// getOrders();
-console.log(catchThePeriod("today", time_intervals.morning.scheduled_delivery_1).period_initial);
-console.log(catchThePeriod("today", time_intervals.morning.scheduled_delivery_1).period_final);
+getOrders();
