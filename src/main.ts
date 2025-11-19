@@ -18,14 +18,18 @@ const timeIntervals = {
 };
 
 const statusID = {
-
+    ATENDIMENTO: 1, 
+    SEPARACAO: 2,
+    EMPACOTAMENTO: 3,
+    FATURAMENTO: 4,
+    AGUARDANDO_ATENDIMENTO: 9,
+    EM_ATENDIMENTO: 10,
 } as const;
 
 function catchThePeriod(
   day: "today" | "tomorrow",
   [start, end]: [string, string]
 ) {
-
   const date = getFormattedDate(day);
 
   return {
